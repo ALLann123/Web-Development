@@ -1,0 +1,61 @@
+,Store,Product,Price,Date
+0,Walmart,Rice,25.0,2022-01-01
+1,Costco,Rice,23.0,2022-01-01
+2,Target,Rice,22.99,2022-01-01
+3,Walmart,Rice,25.75,2022-02-01
+4,Costco,Rice,23.99,2022-02-01
+5,Target,Rice,23.25,2022-02-01
+6,Walmart,Rice,26.99,2022-03-01
+7,Costco,Rice,24.99,2022-03-01
+8,Target,Rice,24.25,2022-03-01
+9,Walmart,Rice,26.99,2022-04-01
+10,Costco,Rice,25.25,2022-04-01
+11,Target,Rice,24.75,2022-04-01
+12,Walmart,Dried Beans,22.99,2022-01-01
+13,Costco,Dried Beans,20.99,2022-01-01
+14,Target,Dried Beans,23.99,2022-01-01
+15,Walmart,Dried Beans,23.99,2022-02-01
+16,Costco,Dried Beans,22.99,2022-02-01
+17,Target,Dried Beans,24.99,2022-02-01
+18,Walmart,Dried Beans,24.25,2022-03-01
+19,Costco,Dried Beans,22.99,2022-03-01
+20,Target,Dried Beans,25.45,2022-03-01
+21,Walmart,Dried Beans,24.49,2022-04-01
+22,Costco,Dried Beans,23.99,2022-04-01
+23,Target,Dried Beans,25.79,2022-04-01
+24,Walmart,Bottled Water ,5.0,2022-01-01
+25,Costco,Bottled Water ,4.25,2022-01-01
+26,Target,Bottled Water ,4.99,2022-01-01
+27,Walmart,Bottled Water ,5.25,2022-02-01
+28,Costco,Bottled Water ,4.49,2022-02-01
+29,Target,Bottled Water ,5.15,2022-02-01
+30,Walmart,Bottled Water ,5.45,2022-03-01
+31,Costco,Bottled Water ,4.8,2022-03-01
+32,Target,Bottled Water ,5.25,2022-03-01
+33,Walmart,Bottled Water ,5.75,2022-04-01
+34,Costco,Bottled Water ,4.89,2022-04-01
+35,Target,Bottled Water ,5.35,2022-04-01
+36,Walmart,Canned Vegetables,0.65,2022-01-01
+37,Costco,Canned Vegetables,0.85,2022-01-01
+38,Target,Canned Vegetables,0.65,2022-01-01
+39,Walmart,Canned Vegetables,0.75,2022-02-01
+40,Costco,Canned Vegetables,0.85,2022-02-01
+41,Target,Canned Vegetables,0.69,2022-02-01
+42,Walmart,Canned Vegetables,0.85,2022-03-01
+43,Costco,Canned Vegetables,0.85,2022-03-01
+44,Target,Canned Vegetables,0.74,2022-03-01
+45,Walmart,Canned Vegetables,1.0,2022-04-01
+46,Costco,Canned Vegetables,0.85,2022-04-01
+47,Target,Canned Vegetables,0.79,2022-04-01
+48,Walmart,Milk,2.0,2022-01-01
+49,Costco,Milk,2.3,2022-01-01
+50,Target,Milk,2.2,2022-01-01
+51,Walmart,Milk,2.1,2022-02-01
+52,Costco,Milk,2.4,2022-02-01
+53,Target,Milk,2.45,2022-02-01
+54,Walmart,Milk,2.4,2022-03-01
+55,Costco,Milk,2.5,2022-03-01
+56,Target,Milk,2.7,2022-03-01
+57,Walmart,Milk,2.9,2022-04-01
+58,Costco,Milk,2.7,2022-04-01
+59,Target,Milk,3.0,2022-04-01
