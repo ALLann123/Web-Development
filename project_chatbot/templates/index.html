@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chatbot-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: #f0f4f8;
+            border-radius: 10px;
+        }
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: #9cb3c9;
+            border-radius: 10px;
+        }
+        .chatbot-messages::-webkit-scrollbar-thumb:hover {
+            background: #829bb2;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .icon-sm { width: 1.25rem; height: 1.25rem; }
+        .icon-md { width: 1.5rem; height: 1.5rem; }
+        .icon-lg { width: 2rem; height: 2rem; }
+        #chat-popup.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        #chat-popup {
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .bounce-animation {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Page Content -->
+    <div class="container mx-auto p-6 md:p-10 min-h-screen flex flex-col items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+            <h1 class="text-4xl font-bold text-slate-700 mb-4">Welcome to Our Service</h1>
+            <p class="text-slate-600 text-lg mb-6">
+                Need help? Click the chat icon below to talk to our assistant!
+            </p>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle -->
+    <div id="chat-toggle" class="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-blue-600 text-white p-3.5 rounded-full shadow-xl cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon-lg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-3.86 8.25-8.625 8.25C7.836 20.25 4.5 16.756 4.5 12S7.836 3.75 12.375 3.75 21 7.444 21 12z" />
+        </svg>
+    </div>
+
+    <!-- Chatbot Popup -->
+    <div id="chat-popup" class="hidden fixed bottom-20 right-5 md:bottom-24 md:right-8 w-[calc(100vw-2.5rem)] max-w-sm h-[75vh] max-h-[550px] bg-white rounded-xl shadow-2xl flex flex-col z-40">
+        <!-- Header -->
+        <div class="flex justify-between items-center p-4 bg-blue-600 text-white rounded-t-xl">
+            <h3 class="font-semibold text-lg">Chat Assistant</h3>
+            <button id="close-chat" class="text-blue-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-full p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="icon-md">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto chatbot-messages bg-slate-50">
+            <div class="flex justify-start group">
+                <div class="bg-slate-200 text-slate-700 py-2 px-3.5 rounded-xl max-w-[80%] shadow-sm">
+                    <p class="text-sm">Hello! I'm your virtual assistant. How can I help you today?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-3 border-t border-slate-200 bg-white rounded-b-xl">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-grow p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow text-sm text-slate-700 placeholder-slate-400">
+                <button id="send-button" class="bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon-md">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatPopup = document.getElementById('chat-popup');
+        const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+
+        let isChatOpen = false;
+
+        // Toggle Chat Visibility
+        function toggleChatPopup() {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatPopup.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    chatPopup.classList.add('open');
+                });
+                chatInput.focus();
+            } else {
+                chatPopup.classList.remove('open');
+                setTimeout(() => {
+                    chatPopup.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Event Listeners
+        chatToggle.addEventListener('click', toggleChatPopup);
+        closeChat.addEventListener('click', toggleChatPopup);
+
+        // Add Message to Chat
+        function addMessageToChat(text, sender) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('flex', 'group', 'animate-fade-in');
+
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.classList.add('py-2', 'px-3.5', 'rounded-xl', 'max-w-[80%]', 'shadow-sm', 'text-sm');
+            
+            bubbleDiv.textContent = text;
+
+            if (sender === 'user') {
+                messageWrapper.classList.add('justify-end');
+                bubbleDiv.classList.add('bg-blue-500', 'text-white');
+            } else {
+                messageWrapper.classList.add('justify-start');
+                bubbleDiv.classList.add('bg-slate-200', 'text-slate-700');
+            }
+            
+            messageWrapper.appendChild(bubbleDiv);
+            chatMessages.appendChild(messageWrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Show Typing Indicator
+        function showTypingIndicator() {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.classList.add('flex', 'justify-start', 'group');
+            typingIndicator.innerHTML = `
+                <div class="bg-slate-200 text-slate-700 py-2 px-3.5 rounded-xl max-w-[80%] shadow-sm">
+                    <div class="flex space-x-1">
+                        <div class="w-2 h-2 rounded-full bg-slate-400 bounce-animation"></div>
+                        <div class="w-2 h-2 rounded-full bg-slate-400 bounce-animation" style="animation-delay: 0.2s"></div>
+                        <div class="w-2 h-2 rounded-full bg-slate-400 bounce-animation" style="animation-delay: 0.4s"></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Remove Typing Indicator
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Handle Sending Messages
+        async function handleSendMessage() {
+            const messageText = chatInput.value.trim();
+            if (messageText) {
+                addMessageToChat(messageText, 'user');
+                chatInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                try {
+                    // Send to Flask backend
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: messageText })
+                    });
+
+                    removeTypingIndicator();
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        addMessageToChat("Sorry, there was an error processing your request.", 'bot');
+                        console.error("Backend error:", data.error);
+                    } else {
+                        addMessageToChat(data.answer, 'bot');
+                    }
+                } catch (error) {
+                    removeTypingIndicator();
+                    addMessageToChat("Sorry, I'm having trouble connecting to the server. Please try again later.", 'bot');
+                    console.error("Fetch error:", error);
+                }
+            }
+        }
+
+        // Event Listeners for Sending
+        sendButton.addEventListener('click', handleSendMessage);
+        chatInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+
+        // Close chat when clicking outside
+        document.addEventListener('click', (event) => {
+            if (isChatOpen && !chatPopup.contains(event.target) && !chatToggle.contains(event.target)) {
+                toggleChatPopup();
+            }
+        });
+
+        // Add animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
